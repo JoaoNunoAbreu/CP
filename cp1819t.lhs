@@ -1147,6 +1147,26 @@ calcula = cataExpr (either (id) (cond ((== "+") . getOp . p1) f g))
     f = uncurry(+) . p2
     g = uncurry(*) . p2
 
+\end{code}
+
+\begin{eqnarray*}
+\xymatrix@@C=2cm{
+    |Expr|
+           \ar[d]_-{|calcula|}
+&
+    |Either Int (Op,(Expr,Expr))|
+           \ar[d]^{|id + (f >< (calcula >< calcula))|}
+           \ar[l]_-{|inNat|}
+\\
+     |Int|
+&
+     |Either Int (Op,(Int,Int))|
+           \ar[l]^-{|g|}
+}
+\end{eqnarray*}
+
+\begin{code}
+
 show' (Num a) = show a
 show' (Bop e1 (Op o) e2) = show' e1 ++ o ++ show' e2
 

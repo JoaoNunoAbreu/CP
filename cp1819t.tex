@@ -1799,9 +1799,8 @@ outras funções auxiliares que sejam necessárias.
 
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{3}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{5}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{6}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{12}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
 \>[B]{}\Varid{inExpr}\mathbin{::}\Conid{Int}+(\Conid{Op},(\Conid{Expr},\Conid{Expr}))\to \Conid{Expr}{}\<[E]%
 \\
@@ -1823,47 +1822,41 @@ outras funções auxiliares que sejam necessárias.
 \\[\blanklineskip]%
 \>[B]{}\Varid{calcula}\mathbin{::}\Conid{Expr}\to \Conid{Int}{}\<[E]%
 \\
-\>[B]{}\Varid{calcula}\;\Varid{e}\mathrel{=}\bot {}\<[E]%
-\\[\blanklineskip]%
-\>[B]{}\lambda \Varid{begin}\;\{\mskip1.5mu \Varid{eqnarray}\mathbin{*}\mskip1.5mu\}{}\<[E]%
+\>[B]{}\Varid{calcula}\mathrel{=}\Varid{cataExpr}\;\alt{\Varid{id}}{\Varid{cond}\;((\equiv \text{\ttfamily \char34 +\char34})\comp \Varid{getOp}\comp \p1)\;\Varid{f}\;\Varid{g}}{}\<[E]%
 \\
-\>[B]{}\lambda \Varid{xymatrix}\mathbin{@@}\Conid{C}\mathrel{=}\mathrm{2}\;\Varid{cm}\;\{\mskip1.5mu {}\<[E]%
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\mathbf{where}{}\<[E]%
 \\
-\>[B]{}\hsindent{5}{}\<[5]%
-\>[5]{}\mid \N_0\mid {}\<[E]%
+\>[3]{}\hsindent{2}{}\<[5]%
+\>[5]{}\Varid{f}\mathrel{=}\uncurry{(\mathbin{+})}\comp \p2{}\<[E]%
 \\
-\>[5]{}\hsindent{7}{}\<[12]%
-\>[12]{}\lambda \Varid{ar}\;[\mskip1.5mu \Varid{d}\mskip1.5mu]\;\anonymous \mathbin{-}\{\mskip1.5mu \mid \cata{\Varid{g}}\mid \mskip1.5mu\}{}\<[E]%
+\>[3]{}\hsindent{2}{}\<[5]%
+\>[5]{}\Varid{g}\mathrel{=}\uncurry{(\mathbin{*})}\comp \p2{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+\begin{eqnarray*}
+\xymatrix@C=2cm{
+    \ensuremath{\Conid{Expr}}
+           \ar[d]_-{\ensuremath{\Varid{calcula}}}
+&
+    \ensuremath{\Conid{Int}+(\Conid{Op},(\Conid{Expr},\Conid{Expr}))}
+           \ar[d]^{\ensuremath{\Varid{id}\mathbin{+}(\Varid{f}\times(\Varid{calcula}\times\Varid{calcula}))}}
+           \ar[l]_-{\ensuremath{\mathsf{in}}}
 \\
-\>[B]{}\mathbin{\&}{}\<[E]%
+     \ensuremath{\Conid{Int}}
+&
+     \ensuremath{\Conid{Int}+(\Conid{Op},(\Conid{Int},\Conid{Int}))}
+           \ar[l]^-{\ensuremath{\Varid{g}}}
+}
+\end{eqnarray*}
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{show'}\;(\Conid{Num}\;\Varid{a})\mathrel{=}\Varid{show}\;\Varid{a}{}\<[E]%
 \\
-\>[B]{}\hsindent{5}{}\<[5]%
-\>[5]{}\mid \mathrm{1}\mathbin{+}\N_0\mid {}\<[E]%
-\\
-\>[5]{}\hsindent{7}{}\<[12]%
-\>[12]{}\lambda \Varid{ar}\;[\mskip1.5mu \Varid{d}\mskip1.5mu]\mathbin{\uparrow}\{\mskip1.5mu \mid \Varid{id}\mathbin{+}\cata{\Varid{g}}\mid \mskip1.5mu\}{}\<[E]%
-\\
-\>[5]{}\hsindent{7}{}\<[12]%
-\>[12]{}\lambda \Varid{ar}\;[\mskip1.5mu \Varid{l}\mskip1.5mu]\;\anonymous \mathbin{-}\{\mskip1.5mu \mid \mathsf{in}\mid \mskip1.5mu\}{}\<[E]%
-\\
-\>[B]{}\mathbin{\char92 \char92 }{}\<[E]%
-\\
-\>[B]{}\hsindent{6}{}\<[6]%
-\>[6]{}\mid \Conid{B}\mid {}\<[E]%
-\\
-\>[B]{}\mathbin{\&}{}\<[E]%
-\\
-\>[B]{}\hsindent{6}{}\<[6]%
-\>[6]{}\mid \mathrm{1}\mathbin{+}\Conid{B}\mid {}\<[E]%
-\\
-\>[6]{}\hsindent{6}{}\<[12]%
-\>[12]{}\lambda \Varid{ar}\;[\mskip1.5mu \Varid{l}\mskip1.5mu]\mathbin{\char94 -}\{\mskip1.5mu \mid \Varid{g}\mid \mskip1.5mu\}{}\<[E]%
-\\
-\>[B]{}\mskip1.5mu\}{}\<[E]%
-\\
-\>[B]{}\lambda \Varid{end}\;\{\mskip1.5mu \Varid{eqnarray}\mathbin{*}\mskip1.5mu\}{}\<[E]%
-\\[\blanklineskip]%
-\>[B]{}\Varid{show'}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{show'}\;(\Conid{Bop}\;e_1 \;(\Conid{Op}\;\Varid{o})\;e_2 )\mathrel{=}\Varid{show'}\;e_1 \plus \Varid{o}\plus \Varid{show'}\;e_2 {}\<[E]%
 \\[\blanklineskip]%
 \>[B]{}\Varid{compile}\mathbin{::}\Conid{String}\to \Conid{Codigo}{}\<[E]%
 \\
@@ -1881,6 +1874,10 @@ outras funções auxiliares que sejam necessárias.
 \\
 \>[B]{}\Varid{result}\mathrel{=}{}\<[11]%
 \>[11]{}(\comp ){}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{getOp}\mathbin{::}\Conid{Op}\to \Conid{String}{}\<[E]%
+\\
+\>[B]{}\Varid{getOp}\;(\Conid{Op}\;\Varid{o})\mathrel{=}\Varid{o}{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 
