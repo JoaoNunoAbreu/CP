@@ -1853,16 +1853,76 @@ outras funções auxiliares que sejam necessárias.
 
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{3}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{show'}\;(\Conid{Num}\;\Varid{a})\mathrel{=}\Varid{show}\;\Varid{a}{}\<[E]%
+\>[B]{}\Varid{show'}\mathrel{=}\Varid{cataExpr}\;\alt{\Varid{show}}{\Varid{aux}}{}\<[E]%
 \\
-\>[B]{}\Varid{show'}\;(\Conid{Bop}\;e_1 \;(\Conid{Op}\;\Varid{o})\;e_2 )\mathrel{=}\Varid{show'}\;e_1 \plus \Varid{o}\plus \Varid{show'}\;e_2 {}\<[E]%
-\\[\blanklineskip]%
-\>[B]{}\Varid{compile}\mathbin{::}\Conid{String}\to \Conid{Codigo}{}\<[E]%
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\mathbf{where}{}\<[E]%
 \\
-\>[B]{}\Varid{compile}\mathrel{=}\bot {}\<[E]%
+\>[3]{}\hsindent{2}{}\<[5]%
+\>[5]{}\Varid{aux}\mathbin{::}(\Conid{Op},(\Conid{String},\Conid{String}))\to \Conid{String}{}\<[E]%
+\\
+\>[3]{}\hsindent{2}{}\<[5]%
+\>[5]{}\Varid{aux}\;((\Conid{Op}\;\Varid{o}),(\Varid{s1},\Varid{s2}))\mathrel{=}\Varid{s1}\plus \Varid{o}\plus \Varid{s2}{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
+
+\begin{eqnarray*}
+\xymatrix@C=2cm{
+    \ensuremath{\Conid{Expr}}
+           \ar[d]_-{\ensuremath{\Varid{show'}}}
+&
+    \ensuremath{\Conid{Int}+(\Conid{Op},(\Conid{Expr},\Conid{Expr}))}
+           \ar[d]^{\ensuremath{\Varid{id}\mathbin{+}(\Varid{f}\times(\Varid{show'}\times\Varid{show'}))}}
+           \ar[l]_-{\ensuremath{\mathsf{in}}}
+\\
+     \ensuremath{\Conid{String}}
+&
+     \ensuremath{\Conid{Int}+(\Conid{Op},(\Conid{String},\Conid{String}))}
+           \ar[l]^-{\ensuremath{\Varid{g}}}
+}
+\end{eqnarray*}
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{3}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{compile}\mathbin{::}\Conid{String}\to \Conid{Codigo}{}\<[E]%
+\\
+\>[B]{}\Varid{compile}\mathrel{=}\Varid{cataExpr}\;\alt{\Varid{f}}{\Varid{cond}\;((\equiv \text{\ttfamily \char34 +\char34})\comp \Varid{getOp}\comp \p1)\;\Varid{g}\;\Varid{h}}\comp \p1\comp \Varid{head}\comp \Varid{readExp}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\mathbf{where}{}\<[E]%
+\\
+\>[3]{}\hsindent{2}{}\<[5]%
+\>[5]{}\Varid{f}\mathrel{=}\Varid{singl}\comp \Varid{criaString}{}\<[E]%
+\\
+\>[3]{}\hsindent{2}{}\<[5]%
+\>[5]{}\Varid{g}\mathrel{=}\Varid{addSoma}\comp \uncurry{(\plus )}\comp \p2{}\<[E]%
+\\
+\>[3]{}\hsindent{2}{}\<[5]%
+\>[5]{}\Varid{h}\mathrel{=}\Varid{addMul}\comp \uncurry{(\plus )}\comp \p2{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+\begin{eqnarray*}
+\xymatrix@C=2cm{
+    \ensuremath{\Conid{Expr}}
+           \ar[d]_-{\ensuremath{\Varid{compile}}}
+&
+    \ensuremath{\Conid{Int}+(\Conid{Op},(\Conid{Expr},\Conid{Expr}))}
+           \ar[d]^{\ensuremath{\Varid{id}\mathbin{+}(\Varid{f}\times(\Varid{compile}\times\Varid{compile}))}}
+           \ar[l]_-{\ensuremath{\mathsf{in}}}
+\\
+     \ensuremath{\Conid{Codigo}}
+&
+     \ensuremath{\Conid{Int}+(\Conid{Op},(\Conid{Codigo},\Conid{Codigo}))}
+           \ar[l]^-{\ensuremath{\Varid{g}}}
+}
+\end{eqnarray*}
 
 \subsection*{Funções auxiliares Problema 1}
 
@@ -1878,6 +1938,18 @@ outras funções auxiliares que sejam necessárias.
 \>[B]{}\Varid{getOp}\mathbin{::}\Conid{Op}\to \Conid{String}{}\<[E]%
 \\
 \>[B]{}\Varid{getOp}\;(\Conid{Op}\;\Varid{o})\mathrel{=}\Varid{o}{}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{criaString}\mathbin{::}\Conid{Int}\to \Conid{String}{}\<[E]%
+\\
+\>[B]{}\Varid{criaString}\;\Varid{i}\mathrel{=}\text{\ttfamily \char34 PUSH~\char34}\plus \Varid{show}\;\Varid{i}{}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{addSoma}\mathbin{::}\Conid{Codigo}\to \Conid{Codigo}{}\<[E]%
+\\
+\>[B]{}\Varid{addSoma}\;\Varid{l}\mathrel{=}\uncurry{(\plus )}\;(\Varid{l},\Varid{singl}\;\text{\ttfamily \char34 ADD\char34}){}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{addMul}\mathbin{::}\Conid{Codigo}\to \Conid{Codigo}{}\<[E]%
+\\
+\>[B]{}\Varid{addMul}\;\Varid{l}\mathrel{=}\uncurry{(\plus )}\;(\Varid{l},\Varid{singl}\;\text{\ttfamily \char34 MUL\char34}){}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 

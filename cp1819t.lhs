@@ -1167,13 +1167,55 @@ calcula = cataExpr (either (id) (cond ((== "+") . getOp . p1) f g))
 
 \begin{code}
 
-show' (Num a) = show a
-show' (Bop e1 (Op o) e2) = show' e1 ++ o ++ show' e2
-
-compile :: String -> Codigo
-compile = undefined
+show' = cataExpr (either show aux)
+  where
+    aux :: (Op,(String,String)) -> String
+    aux ((Op o),(s1,s2)) = s1 ++ o ++ s2
 
 \end{code}
+
+\begin{eqnarray*}
+\xymatrix@@C=2cm{
+    |Expr|
+           \ar[d]_-{|show'|}
+&
+    |Either Int (Op,(Expr,Expr))|
+           \ar[d]^{|id + (f >< (show' >< show'))|}
+           \ar[l]_-{|inNat|}
+\\
+     |String|
+&
+     |Either Int (Op,(String,String))|
+           \ar[l]^-{|g|}
+}
+\end{eqnarray*}
+
+\begin{code}
+
+compile :: String -> Codigo
+compile = cataExpr (either f (cond ((== "+") . getOp . p1) g h)) . p1 . head . readExp
+  where
+    f = singl . criaString
+    g = addSoma . uncurry(++) . p2
+    h = addMul . uncurry(++) . p2
+
+\end{code}
+
+\begin{eqnarray*}
+\xymatrix@@C=2cm{
+    |Expr|
+           \ar[d]_-{|compile|}
+&
+    |Either Int (Op,(Expr,Expr))|
+           \ar[d]^{|id + (f >< (compile >< compile))|}
+           \ar[l]_-{|inNat|}
+\\
+     |Codigo|
+&
+     |Either Int (Op,(Codigo,Codigo))|
+           \ar[l]^-{|g|}
+}
+\end{eqnarray*}
 
 \subsection*{Funções auxiliares Problema 1}
 
@@ -1184,6 +1226,15 @@ result =  (.)
 
 getOp :: Op -> String
 getOp (Op o) = o
+
+criaString :: Int -> String
+criaString i = "PUSH " ++ show i
+
+addSoma :: Codigo -> Codigo
+addSoma l = uncurry (++) (l,singl "ADD")
+
+addMul :: Codigo -> Codigo
+addMul l = uncurry (++) (l,singl "MUL")
 
 \end{code}
 

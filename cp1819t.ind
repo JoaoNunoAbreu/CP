@@ -10,21 +10,22 @@
   \item Combinador ``pointfree''
     \subitem \emph  {cata}, \hyperpage{10}
     \subitem \emph  {either}, \hyperpage{3}, \hyperpage{7}, 
-		\hyperpage{13}
+		\hyperpage{13}, \hyperpage{15}
 
   \indexspace
 
   \item Fun\IeC {\c c}\IeC {\~a}o
     \subitem $\pi _1$, \hyperpage{3}, \hyperpage{6}, \hyperpage{8--11}, 
-		\hyperpage{13}
-    \subitem $\pi _2$, \hyperpage{7--10}, \hyperpage{13}
-    \subitem \emph  {for}, \hyperpage{6}, \hyperpage{10}, 
+		\hyperpage{13}, \hyperpage{15}
+    \subitem $\pi _2$, \hyperpage{7--10}, \hyperpage{13}, 
 		\hyperpage{15}
+    \subitem \emph  {for}, \hyperpage{6}, \hyperpage{10}, 
+		\hyperpage{16}
     \subitem \emph  {length}, \hyperpage{8, 9}, \hyperpage{12}
     \subitem \emph  {map}, \hyperpage{7}, \hyperpage{11}, 
 		\hyperpage{13}
     \subitem \emph  {uncurry}, \hyperpage{3}, \hyperpage{8, 9}, 
-		\hyperpage{13}
+		\hyperpage{13}, \hyperpage{15, 16}
   \item Functor, \hyperpage{2}, \hyperpage{5, 6}, \hyperpage{14}
 
   \indexspace
