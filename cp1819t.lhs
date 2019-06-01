@@ -1169,7 +1169,6 @@ calcula = cataExpr (either (id) (cond ((== "+") . getOp . p1) f g))
 
 show' = cataExpr (either show aux)
   where
-    aux :: (Op,(String,String)) -> String
     aux ((Op o),(s1,s2)) = s1 ++ o ++ s2
 
 \end{code}
@@ -1242,18 +1241,22 @@ addMul l = uncurry (++) (l,singl "MUL")
 
 \begin{code}
 inL2D :: Either a (b, (X a b,X a b)) -> X a b
-inL2D = undefined
+inL2D = either Unid (uncurry((result) uncurry(Comp)))
 
 outL2D :: X a b -> Either a (b, (X a b,X a b))
-outL2D = undefined
+outL2D (Unid d) = Left d 
+outL2D (Comp b x1 x2) = Right(b,(x1,x2))
 
-recL2D f = undefined
+baseL2D f g = id -|- (f >< (g >< g))
 
-cataL2D g = undefined
+recL2D f = baseL2D id f
 
-anaL2D g = undefined
+cataL2D g = g . (recL2D (cataL2D g)) . outL2D
 
-collectLeafs = undefined
+anaL2D g = inL2D . (recL2D (anaL2D g) ) . g
+
+collectLeafs :: X a b -> [a]
+collectLeafs = cataL2D(either singl (uncurry (++) . p2))
 
 dimen :: X Caixa Tipo -> (Float, Float)
 dimen = undefined
@@ -1264,7 +1267,9 @@ calcOrigins = undefined
 calc :: Tipo -> Origem -> (Float, Float) -> Origem
 calc = undefined 
 
+caixasAndOrigin2Pict :: (X Caixa Tipo, Origem) -> G.Picture
 caixasAndOrigin2Pict = undefined
+
 \end{code}
 
 \subsection*{Problema 3}
@@ -1279,18 +1284,23 @@ cos' x = prj . for loop init where
 \subsection*{Problema 4}
 Triologia ``ana-cata-hilo":
 \begin{code}
-outFS (FS l) = undefined
-outNode = undefined
 
-baseFS f g h = undefined
+outFS :: FS a b -> [(a, Either b (FS a b))]
+outFS (FS ((a,b):t)) = (a,outNode b) : outFS (FS t)
+
+outNode (File b) = Left b
+outNode (Dir (FS a)) = Right(FS a)
+
+baseFS f g h = id -|- (f >< ((g >< g) >< (h >< h)))
 
 cataFS :: ([(a, Either b c)] -> c) -> FS a b -> c
-cataFS g = undefined
+cataFS g =  undefined
 
 anaFS :: (c -> [(a, Either b c)]) -> c -> FS a b
 anaFS g = undefined
 
 hyloFS g h = undefined
+
 \end{code}
 Outras funções pedidas:
 \begin{code}

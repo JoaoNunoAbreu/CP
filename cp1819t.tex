@@ -1862,9 +1862,6 @@ outras funções auxiliares que sejam necessárias.
 \>[3]{}\mathbf{where}{}\<[E]%
 \\
 \>[3]{}\hsindent{2}{}\<[5]%
-\>[5]{}\Varid{aux}\mathbin{::}(\Conid{Op},(\Conid{String},\Conid{String}))\to \Conid{String}{}\<[E]%
-\\
-\>[3]{}\hsindent{2}{}\<[5]%
 \>[5]{}\Varid{aux}\;((\Conid{Op}\;\Varid{o}),(\Varid{s1},\Varid{s2}))\mathrel{=}\Varid{s1}\plus \Varid{o}\plus \Varid{s2}{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
@@ -1960,19 +1957,25 @@ outras funções auxiliares que sejam necessárias.
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
 \>[B]{}\Varid{inL2D}\mathbin{::}\Varid{a}+(\Varid{b},(\Conid{X}\;\Varid{a}\;\Varid{b},\Conid{X}\;\Varid{a}\;\Varid{b}))\to \Conid{X}\;\Varid{a}\;\Varid{b}{}\<[E]%
 \\
-\>[B]{}\Varid{inL2D}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{inL2D}\mathrel{=}\alt{\Conid{Unid}}{\uncurry{((\Varid{result})\;\uncurry{\cdot }\;(\Conid{Comp}))}}{}\<[E]%
 \\[\blanklineskip]%
 \>[B]{}\Varid{outL2D}\mathbin{::}\Conid{X}\;\Varid{a}\;\Varid{b}\to \Varid{a}+(\Varid{b},(\Conid{X}\;\Varid{a}\;\Varid{b},\Conid{X}\;\Varid{a}\;\Varid{b})){}\<[E]%
 \\
-\>[B]{}\Varid{outL2D}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{outL2D}\;(\Conid{Unid}\;\Varid{d})\mathrel{=}i_1\;\Varid{d}{}\<[E]%
+\\
+\>[B]{}\Varid{outL2D}\;(\Conid{Comp}\;\Varid{b}\;\Varid{x1}\;\Varid{x2})\mathrel{=}i_2\;(\Varid{b},(\Varid{x1},\Varid{x2})){}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{recL2D}\;\Varid{f}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{baseL2D}\;\Varid{f}\;\Varid{g}\mathrel{=}\Varid{id}+(\Varid{f}\times(\Varid{g}\times\Varid{g})){}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{cataL2D}\;\Varid{g}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{recL2D}\;\Varid{f}\mathrel{=}\Varid{baseL2D}\;\Varid{id}\;\Varid{f}{}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{anaL2D}\;\Varid{g}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{cataL2D}\;\Varid{g}\mathrel{=}\Varid{g}\comp (\Varid{recL2D}\;(\Varid{cataL2D}\;\Varid{g}))\comp \Varid{outL2D}{}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{collectLeafs}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{anaL2D}\;\Varid{g}\mathrel{=}\Varid{inL2D}\comp (\Varid{recL2D}\;(\Varid{anaL2D}\;\Varid{g}))\comp \Varid{g}{}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{collectLeafs}\mathbin{::}\Conid{X}\;\Varid{a}\;\Varid{b}\to [\mskip1.5mu \Varid{a}\mskip1.5mu]{}\<[E]%
+\\
+\>[B]{}\Varid{collectLeafs}\mathrel{=}\Varid{cataL2D}\;\alt{\Varid{singl}}{\uncurry{(\plus )}\comp \p2}{}\<[E]%
 \\[\blanklineskip]%
 \>[B]{}\Varid{dimen}\mathbin{::}\Conid{X}\;\Conid{Caixa}\;\Conid{Tipo}\to (\Conid{Float},\Conid{Float}){}\<[E]%
 \\
@@ -1986,6 +1989,8 @@ outras funções auxiliares que sejam necessárias.
 \\
 \>[B]{}\Varid{calc}\mathrel{=}\bot {}\<[E]%
 \\[\blanklineskip]%
+\>[B]{}\Varid{caixasAndOrigin2Pict}\mathbin{::}(\Conid{X}\;\Conid{Caixa}\;\Conid{Tipo},\Conid{Origem})\to \Conid{\Conid{G}.Picture}{}\<[E]%
+\\
 \>[B]{}\Varid{caixasAndOrigin2Pict}\mathrel{=}\bot {}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
@@ -2013,16 +2018,22 @@ Solução:
 Triologia ``ana-cata-hilo":
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{13}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{outFS}\;(\Conid{FS}\;\Varid{l})\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{outFS}\mathbin{::}\Conid{FS}\;\Varid{a}\;\Varid{b}\to [\mskip1.5mu (\Varid{a},\Varid{b}+(\Conid{FS}\;\Varid{a}\;\Varid{b}))\mskip1.5mu]{}\<[E]%
 \\
-\>[B]{}\Varid{outNode}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{outFS}\;(\Conid{FS}\;((\Varid{a},\Varid{b})\mathbin{:}\Varid{t}))\mathrel{=}(\Varid{a},\Varid{outNode}\;\Varid{b})\mathbin{:}\Varid{outFS}\;(\Conid{FS}\;\Varid{t}){}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{baseFS}\;\Varid{f}\;\Varid{g}\;\Varid{h}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{outNode}\;(\Conid{File}\;\Varid{b})\mathrel{=}i_1\;\Varid{b}{}\<[E]%
+\\
+\>[B]{}\Varid{outNode}\;(\Conid{Dir}\;(\Conid{FS}\;\Varid{a}))\mathrel{=}i_2\;(\Conid{FS}\;\Varid{a}){}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{baseFS}\;\Varid{f}\;\Varid{g}\;\Varid{h}\mathrel{=}\Varid{id}+(\Varid{f}\times((\Varid{g}\times\Varid{g})\times(\Varid{h}\times\Varid{h}))){}\<[E]%
 \\[\blanklineskip]%
 \>[B]{}\Varid{cataFS}\mathbin{::}([\mskip1.5mu (\Varid{a},\Varid{b}+\Varid{c})\mskip1.5mu]\to \Varid{c})\to \Conid{FS}\;\Varid{a}\;\Varid{b}\to \Varid{c}{}\<[E]%
 \\
-\>[B]{}\Varid{cataFS}\;\Varid{g}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{cataFS}\;\Varid{g}\mathrel{=}{}\<[13]%
+\>[13]{}\bot {}\<[E]%
 \\[\blanklineskip]%
 \>[B]{}\Varid{anaFS}\mathbin{::}(\Varid{c}\to [\mskip1.5mu (\Varid{a},\Varid{b}+\Varid{c})\mskip1.5mu])\to \Varid{c}\to \Conid{FS}\;\Varid{a}\;\Varid{b}{}\<[E]%
 \\
