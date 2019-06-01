@@ -1259,16 +1259,39 @@ collectLeafs :: X a b -> [a]
 collectLeafs = cataL2D(either singl (uncurry (++) . p2))
 
 dimen :: X Caixa Tipo -> (Float, Float)
-dimen = undefined
+dimen = cataL2D(either f g)
+  where
+    f :: Caixa -> (Float, Float)
+    f ((a1,a2),_) = (fromIntegral a1, fromIntegral a2)
+    g :: (Tipo, ((Float,Float),(Float,Float))) -> (Float, Float)
+    g (t,((x1,y1),(x2,y2))) = case t of
+                  V  -> (max x1 x2, y1 + y2)
+                  Vd -> (max x1 x2, y1 + y2)
+                  Ve -> (max x1 x2, y1 + y2)
+                  H  -> (x1 + x2,max y1 y2)
+                  Hb -> (x1 + x2,max y1 y2)
+                  Ht -> (x1 + x2,max y1 y2)
 
 calcOrigins :: ((X Caixa Tipo),Origem) -> X (Caixa,Origem) ()
 calcOrigins = undefined
 
+agrupCaixas :: X (Caixa ,Origem)() -> Fig
+agrupCaixas = undefined
+
 calc :: Tipo -> Origem -> (Float, Float) -> Origem
-calc = undefined 
+calc t (o1,o2) (dx,dy) = case t of
+                V  -> (o1 + dx/2,o2 + dy)
+                Vd -> (o1 + dx,o2 + dy) 
+                Ve -> (o1,o2 + dy)
+                H  -> (o1 + dx,o2 + dy/2)
+                Hb -> (o1 + dx,o2)
+                Ht -> (o1 + dx,o2 + dy)
 
 caixasAndOrigin2Pict :: (X Caixa Tipo, Origem) -> G.Picture
 caixasAndOrigin2Pict = undefined
+
+mostraCaixas :: (L2D,Origem) -> IO()
+mostraCaixas = undefined
 
 \end{code}
 
@@ -1291,7 +1314,7 @@ outFS (FS ((a,b):t)) = (a,outNode b) : outFS (FS t)
 outNode (File b) = Left b
 outNode (Dir (FS a)) = Right(FS a)
 
-baseFS f g h = id -|- (f >< ((g >< g) >< (h >< h)))
+baseFS f g h = id -|- (f >< (g -|- h))
 
 cataFS :: ([(a, Either b c)] -> c) -> FS a b -> c
 cataFS g =  undefined
