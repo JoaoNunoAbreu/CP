@@ -1314,7 +1314,7 @@ outFS (FS ((a,b):t)) = (a,outNode b) : outFS (FS t)
 outNode (File b) = Left b
 outNode (Dir (FS a)) = Right(FS a)
 
-baseFS f g h = id -|- (f >< (g -|- h))
+baseFS f g h = map(f >< (g -|- h))
 
 cataFS :: ([(a, Either b c)] -> c) -> FS a b -> c
 cataFS g =  undefined
