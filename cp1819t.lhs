@@ -1293,10 +1293,10 @@ calc t (o1,o2) (dx,dy) = case t of
                 Ht -> (o1 + dx,o2 + dy)
 
 caixasAndOrigin2Pict :: (X Caixa Tipo, Origem) -> G.Picture
-caixasAndOrigin2Pict = undefined
+caixasAndOrigin2Pict = G.Pictures . crCaixa2 . agrupCaixas . calcOrigins
 
 mostraCaixas :: (L2D,Origem) -> IO()
-mostraCaixas = undefined
+mostraCaixas = display . caixasAndOrigin2Pict
 
 \end{code}
 
@@ -1311,6 +1311,10 @@ addPairs (x1,y1) (x2,y2) = (x1+x2,y1+y2)
 
 subPairs :: (Float, Float) -> (Float, Float) -> (Float, Float)
 subPairs (x1,y1) (x2,y2) = (x1-x2,y1-y2)
+
+crCaixa2 :: Fig -> [G.Picture]
+crCaixa2 [] = []
+crCaixa2 ((o,((x,y),(text,color))):t) = crCaixa o (fromIntegral x) (fromIntegral y) text color : crCaixa2 t
 
 \end{code}
 
