@@ -1954,6 +1954,12 @@ outras funções auxiliares que sejam necessárias.
 
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{3}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{17}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{19}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{20}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{22}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
 \>[B]{}\Varid{inL2D}\mathbin{::}\Varid{a}+(\Varid{b},(\Conid{X}\;\Varid{a}\;\Varid{b},\Conid{X}\;\Varid{a}\;\Varid{b}))\to \Conid{X}\;\Varid{a}\;\Varid{b}{}\<[E]%
 \\
@@ -1979,19 +1985,82 @@ outras funções auxiliares que sejam necessárias.
 \\[\blanklineskip]%
 \>[B]{}\Varid{dimen}\mathbin{::}\Conid{X}\;\Conid{Caixa}\;\Conid{Tipo}\to (\Conid{Float},\Conid{Float}){}\<[E]%
 \\
-\>[B]{}\Varid{dimen}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{dimen}\mathrel{=}\Varid{cataL2D}\;\alt{\Varid{f}}{\Varid{g}}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\mathbf{where}{}\<[E]%
+\\
+\>[3]{}\hsindent{2}{}\<[5]%
+\>[5]{}\Varid{f}\mathbin{::}\Conid{Caixa}\to (\Conid{Float},\Conid{Float}){}\<[E]%
+\\
+\>[3]{}\hsindent{2}{}\<[5]%
+\>[5]{}\Varid{f}\;((\Varid{a1},\Varid{a2}),\anonymous )\mathrel{=}(\Varid{fromIntegral}\;\Varid{a1},\Varid{fromIntegral}\;\Varid{a2}){}\<[E]%
+\\
+\>[3]{}\hsindent{2}{}\<[5]%
+\>[5]{}\Varid{g}\mathbin{::}(\Conid{Tipo},((\Conid{Float},\Conid{Float}),(\Conid{Float},\Conid{Float})))\to (\Conid{Float},\Conid{Float}){}\<[E]%
+\\
+\>[3]{}\hsindent{2}{}\<[5]%
+\>[5]{}\Varid{g}\;(\Varid{t},((\Varid{x1},\Varid{y1}),(\Varid{x2},\Varid{y2})))\mathrel{=}\mathbf{case}\;\Varid{t}\;\mathbf{of}{}\<[E]%
+\\
+\>[5]{}\hsindent{14}{}\<[19]%
+\>[19]{}\Conid{V}{}\<[22]%
+\>[22]{}\to (\Varid{max}\;\Varid{x1}\;\Varid{x2},\Varid{y1}\mathbin{+}\Varid{y2}){}\<[E]%
+\\
+\>[5]{}\hsindent{14}{}\<[19]%
+\>[19]{}\Conid{Vd}\to (\Varid{max}\;\Varid{x1}\;\Varid{x2},\Varid{y1}\mathbin{+}\Varid{y2}){}\<[E]%
+\\
+\>[5]{}\hsindent{14}{}\<[19]%
+\>[19]{}\Conid{Ve}\to (\Varid{max}\;\Varid{x1}\;\Varid{x2},\Varid{y1}\mathbin{+}\Varid{y2}){}\<[E]%
+\\
+\>[5]{}\hsindent{14}{}\<[19]%
+\>[19]{}\Conid{H}{}\<[22]%
+\>[22]{}\to (\Varid{x1}\mathbin{+}\Varid{x2},\Varid{max}\;\Varid{y1}\;\Varid{y2}){}\<[E]%
+\\
+\>[5]{}\hsindent{14}{}\<[19]%
+\>[19]{}\Conid{Hb}\to (\Varid{x1}\mathbin{+}\Varid{x2},\Varid{max}\;\Varid{y1}\;\Varid{y2}){}\<[E]%
+\\
+\>[5]{}\hsindent{14}{}\<[19]%
+\>[19]{}\Conid{Ht}\to (\Varid{x1}\mathbin{+}\Varid{x2},\Varid{max}\;\Varid{y1}\;\Varid{y2}){}\<[E]%
 \\[\blanklineskip]%
 \>[B]{}\Varid{calcOrigins}\mathbin{::}((\Conid{X}\;\Conid{Caixa}\;\Conid{Tipo}),\Conid{Origem})\to \Conid{X}\;(\Conid{Caixa},\Conid{Origem})\;(){}\<[E]%
 \\
 \>[B]{}\Varid{calcOrigins}\mathrel{=}\bot {}\<[E]%
 \\[\blanklineskip]%
+\>[B]{}\Varid{agrupCaixas}\mathbin{::}\Conid{X}\;(\Conid{Caixa},\Conid{Origem})\;()\to \Conid{Fig}{}\<[E]%
+\\
+\>[B]{}\Varid{agrupCaixas}\mathrel{=}\bot {}\<[E]%
+\\[\blanklineskip]%
 \>[B]{}\Varid{calc}\mathbin{::}\Conid{Tipo}\to \Conid{Origem}\to (\Conid{Float},\Conid{Float})\to \Conid{Origem}{}\<[E]%
 \\
-\>[B]{}\Varid{calc}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{calc}\;\Varid{t}\;(\Varid{o1},\Varid{o2})\;(\Varid{dx},\Varid{dy})\mathrel{=}\mathbf{case}\;\Varid{t}\;\mathbf{of}{}\<[E]%
+\\
+\>[B]{}\hsindent{17}{}\<[17]%
+\>[17]{}\Conid{V}{}\<[20]%
+\>[20]{}\to (\Varid{o1}\mathbin{+}\Varid{dx}\mathbin{/}\mathrm{2},\Varid{o2}\mathbin{+}\Varid{dy}){}\<[E]%
+\\
+\>[B]{}\hsindent{17}{}\<[17]%
+\>[17]{}\Conid{Vd}\to (\Varid{o1}\mathbin{+}\Varid{dx},\Varid{o2}\mathbin{+}\Varid{dy}){}\<[E]%
+\\
+\>[B]{}\hsindent{17}{}\<[17]%
+\>[17]{}\Conid{Ve}\to (\Varid{o1},\Varid{o2}\mathbin{+}\Varid{dy}){}\<[E]%
+\\
+\>[B]{}\hsindent{17}{}\<[17]%
+\>[17]{}\Conid{H}{}\<[20]%
+\>[20]{}\to (\Varid{o1}\mathbin{+}\Varid{dx},\Varid{o2}\mathbin{+}\Varid{dy}\mathbin{/}\mathrm{2}){}\<[E]%
+\\
+\>[B]{}\hsindent{17}{}\<[17]%
+\>[17]{}\Conid{Hb}\to (\Varid{o1}\mathbin{+}\Varid{dx},\Varid{o2}){}\<[E]%
+\\
+\>[B]{}\hsindent{17}{}\<[17]%
+\>[17]{}\Conid{Ht}\to (\Varid{o1}\mathbin{+}\Varid{dx},\Varid{o2}\mathbin{+}\Varid{dy}){}\<[E]%
 \\[\blanklineskip]%
 \>[B]{}\Varid{caixasAndOrigin2Pict}\mathbin{::}(\Conid{X}\;\Conid{Caixa}\;\Conid{Tipo},\Conid{Origem})\to \Conid{\Conid{G}.Picture}{}\<[E]%
 \\
 \>[B]{}\Varid{caixasAndOrigin2Pict}\mathrel{=}\bot {}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{mostraCaixas}\mathbin{::}(\Conid{L2D},\Conid{Origem})\to \fun{IO}\;(){}\<[E]%
+\\
+\>[B]{}\Varid{mostraCaixas}\mathrel{=}\bot {}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 
@@ -2022,26 +2091,50 @@ Triologia ``ana-cata-hilo":
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
 \>[B]{}\Varid{outFS}\mathbin{::}\Conid{FS}\;\Varid{a}\;\Varid{b}\to [\mskip1.5mu (\Varid{a},\Varid{b}+(\Conid{FS}\;\Varid{a}\;\Varid{b}))\mskip1.5mu]{}\<[E]%
 \\
+\>[B]{}\Varid{outFS}\;(\Conid{FS}\;[\mskip1.5mu \mskip1.5mu])\mathrel{=}[\mskip1.5mu \mskip1.5mu]{}\<[E]%
+\\
 \>[B]{}\Varid{outFS}\;(\Conid{FS}\;((\Varid{a},\Varid{b})\mathbin{:}\Varid{t}))\mathrel{=}(\Varid{a},\Varid{outNode}\;\Varid{b})\mathbin{:}\Varid{outFS}\;(\Conid{FS}\;\Varid{t}){}\<[E]%
 \\[\blanklineskip]%
 \>[B]{}\Varid{outNode}\;(\Conid{File}\;\Varid{b})\mathrel{=}i_1\;\Varid{b}{}\<[E]%
 \\
 \>[B]{}\Varid{outNode}\;(\Conid{Dir}\;(\Conid{FS}\;\Varid{a}))\mathrel{=}i_2\;(\Conid{FS}\;\Varid{a}){}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{baseFS}\;\Varid{f}\;\Varid{g}\;\Varid{h}\mathrel{=}\Varid{id}+(\Varid{f}\times((\Varid{g}\times\Varid{g})\times(\Varid{h}\times\Varid{h}))){}\<[E]%
+\>[B]{}\Varid{baseFS}\;\Varid{f}\;\Varid{g}\;\Varid{h}\mathrel{=}\map \;(\Varid{f}\times(\Varid{g}+\Varid{h})){}\<[E]%
 \\[\blanklineskip]%
 \>[B]{}\Varid{cataFS}\mathbin{::}([\mskip1.5mu (\Varid{a},\Varid{b}+\Varid{c})\mskip1.5mu]\to \Varid{c})\to \Conid{FS}\;\Varid{a}\;\Varid{b}\to \Varid{c}{}\<[E]%
 \\
 \>[B]{}\Varid{cataFS}\;\Varid{g}\mathrel{=}{}\<[13]%
-\>[13]{}\bot {}\<[E]%
-\\[\blanklineskip]%
-\>[B]{}\Varid{anaFS}\mathbin{::}(\Varid{c}\to [\mskip1.5mu (\Varid{a},\Varid{b}+\Varid{c})\mskip1.5mu])\to \Varid{c}\to \Conid{FS}\;\Varid{a}\;\Varid{b}{}\<[E]%
-\\
-\>[B]{}\Varid{anaFS}\;\Varid{g}\mathrel{=}\bot {}\<[E]%
-\\[\blanklineskip]%
-\>[B]{}\Varid{hyloFS}\;\Varid{g}\;\Varid{h}\mathrel{=}\bot {}\<[E]%
+\>[13]{}\Varid{g}\comp (\Varid{recFS}\;(\Varid{cataFS}\;\Varid{g}))\comp \Varid{outFS}{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
+
+\begin{eqnarray*}
+\xymatrix@C=2cm{
+    \ensuremath{\Conid{FS}\;\Varid{a}\;\Varid{b}}
+           \ar[d]_-{\ensuremath{\cata{\Varid{g}}}}
+&
+    \ensuremath{(\Varid{a}\times(\Varid{b}\mathbin{+}\Conid{FS}\;\Varid{a}\;\Varid{b}))\mathbin{\char94 *}}
+           \ar[d]^{\ensuremath{\map \;(\Varid{id}\times(\Varid{id}\mathbin{+}\cata{\Varid{g}}))}}
+           \ar[l]_-{\ensuremath{\mathsf{in}}}
+\\
+     \ensuremath{\Varid{c}}
+&
+     \ensuremath{(\Varid{a}\times(\Varid{b}\mathbin{+}\Varid{c}))\mathbin{\char94 *}}
+           \ar[l]^-{\ensuremath{\Varid{g}}}
+}
+\end{eqnarray*}
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{anaFS}\mathbin{::}(\Varid{c}\to [\mskip1.5mu (\Varid{a},\Varid{b}+\Varid{c})\mskip1.5mu])\to \Varid{c}\to \Conid{FS}\;\Varid{a}\;\Varid{b}{}\<[E]%
+\\
+\>[B]{}\Varid{anaFS}\;\Varid{g}\mathrel{=}\Varid{inFS}\comp (\Varid{recFS}\;(\Varid{anaFS}\;\Varid{g}))\comp \Varid{g}{}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{hyloFS}\;\Varid{g}\;\Varid{h}\mathrel{=}\Varid{cataFS}\;\Varid{h}\comp \Varid{anaFS}\;\Varid{g}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
 Outras funções pedidas:
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%

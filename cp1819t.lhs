@@ -1273,10 +1273,15 @@ dimen = cataL2D(either f g)
                   Ht -> (x1 + x2,max y1 y2)
 
 calcOrigins :: ((X Caixa Tipo),Origem) -> X (Caixa,Origem) ()
-calcOrigins = undefined
+calcOrigins (Unid d,o) = Unid(d,o)
+calcOrigins (Comp b (Unid r) (Unid l),o) = Comp () (Unid(r,subPairs o (getDimensao r))) (Unid(l,addPairs o (getDimensao l)))
+calcOrigins (Comp b (Unid r) comp,o) = Comp() (Unid(r,subPairs o (getDimensao r))) (calcOrigins(comp,o))
+calcOrigins (Comp b comp (Unid l),o) = Comp() (calcOrigins(comp,o)) (Unid(l,addPairs o (getDimensao l)))
+calcOrigins (Comp b x1 x2,o) = Comp () (calcOrigins (x1,o)) (calcOrigins (x2,o)) 
 
 agrupCaixas :: X (Caixa ,Origem)() -> Fig
-agrupCaixas = undefined
+agrupCaixas (Unid(c,o)) = [(o,c)]
+agrupCaixas (Comp () x1 x2) = agrupCaixas x1 ++ agrupCaixas x2
 
 calc :: Tipo -> Origem -> (Float, Float) -> Origem
 calc t (o1,o2) (dx,dy) = case t of
@@ -1295,13 +1300,54 @@ mostraCaixas = undefined
 
 \end{code}
 
+\subsection*{Funções Auxiliares Problema 3}
+\begin{code}
+
+getDimensao :: Caixa -> (Float,Float)
+getDimensao ((x,y),_) = (fromIntegral x, fromIntegral y)
+
+addPairs :: (Float, Float) -> (Float, Float) -> (Float, Float)
+addPairs (x1,y1) (x2,y2) = (x1+x2,y1+y2)
+
+subPairs :: (Float, Float) -> (Float, Float) -> (Float, Float)
+subPairs (x1,y1) (x2,y2) = (x1-x2,y1-y2)
+
+\end{code}
+
 \subsection*{Problema 3}
 Solução:
 \begin{code}
 cos' x = prj . for loop init where
-   loop = undefined
-   init = undefined
-   prj = undefined
+   loop (coss,rec1,rec2,rec3) = (coss + rec1,rec1 * (-square(x)/rec2),rec2 + rec3,rec3 + 8 )
+   init = (1,-square(x)/2,12,18)
+   prj (coss,rec1,rec2,rec3) = coss
+\end{code}
+
+\subsection*{Funções de recursividade}
+
+\begin{code}
+
+
+coss :: (Num a,Eq a,Floating a,Integral a) => a -> a -> a
+coss x 0 = 1
+coss x (n + 1) = (coss x n) + (rec1 x n)
+
+rec1 :: (Num a,Eq a,Floating a,Integral a) => a -> a -> a
+rec1 x 0 = -square(x)/2
+rec1 x (n + 1) = (rec1 x n) * (-square(x)/rec2 x n) 
+
+rec2 :: (Num a,Eq a,Floating a,Integral a) => a -> a -> a
+rec2 x 0 = 12
+rec2 x (n + 1) = (rec2 x n) + (rec3 x n)
+
+rec3 :: (Num a,Eq a,Floating a,Integral a) => a -> a -> a
+rec3 x 0 = 18
+rec3 x (n + 1) = (rec3 x n) + 8
+\end{code}
+\subsection*{Funções Auxiliares}
+\begin{code}
+square :: (Num a,Eq a,Floating a) => a -> a
+square num = num*num
 \end{code}
 
 \subsection*{Problema 4}
@@ -1309,22 +1355,44 @@ Triologia ``ana-cata-hilo":
 \begin{code}
 
 outFS :: FS a b -> [(a, Either b (FS a b))]
+outFS (FS []) = []
 outFS (FS ((a,b):t)) = (a,outNode b) : outFS (FS t)
 
 outNode (File b) = Left b
 outNode (Dir (FS a)) = Right(FS a)
 
-baseFS f g h = map(f >< (g -|- h))
+baseFS f g h = map (f >< (g -|- h))
 
 cataFS :: ([(a, Either b c)] -> c) -> FS a b -> c
-cataFS g =  undefined
-
-anaFS :: (c -> [(a, Either b c)]) -> c -> FS a b
-anaFS g = undefined
-
-hyloFS g h = undefined
+cataFS g =  g . (recFS(cataFS g)) . outFS
 
 \end{code}
+
+\begin{eqnarray*}
+\xymatrix@@C=2cm{
+    |FS a b|
+           \ar[d]_-{|cataNat g|}
+&
+    |(a >< (b + FS a b))*|
+           \ar[d]^{|map(id >< (id + (cataNat g)))|}
+           \ar[l]_-{|inNat|}
+\\
+     |c|
+&
+     |(a >< (b + c))*|
+           \ar[l]^-{|g|}
+}
+\end{eqnarray*}
+
+\begin{code}
+
+anaFS :: (c -> [(a, Either b c)]) -> c -> FS a b
+anaFS g = inFS . (recFS(anaFS g)) . g
+
+hyloFS g h = cataFS h . anaFS g
+
+\end{code}
+
 Outras funções pedidas:
 \begin{code}
 check :: (Eq a) => FS a b -> Bool
@@ -1353,6 +1421,14 @@ auxJoin = undefined
 
 cFS2Exp :: a -> FS a b -> (Exp () a)
 cFS2Exp = undefined
+\end{code}
+
+\subsection*{Funções auxiliares Problema 4}
+\begin{code}
+hasDuplicates :: (Ord a) => [a] -> Bool
+hasDuplicates xs = length (nub xs) /= length xs
+
+
 \end{code}
 
 %----------------- Fim do anexo com soluções dos alunos ------------------------%
