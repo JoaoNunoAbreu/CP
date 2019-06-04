@@ -2024,11 +2024,15 @@ outras funções auxiliares que sejam necessárias.
 \\[\blanklineskip]%
 \>[B]{}\Varid{calcOrigins}\mathbin{::}((\Conid{X}\;\Conid{Caixa}\;\Conid{Tipo}),\Conid{Origem})\to \Conid{X}\;(\Conid{Caixa},\Conid{Origem})\;(){}\<[E]%
 \\
-\>[B]{}\Varid{calcOrigins}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{calcOrigins}\;(\Conid{Unid}\;\Varid{d},\Varid{o})\mathrel{=}\Conid{Unid}\;(\Varid{d},\Varid{o}){}\<[E]%
+\\
+\>[B]{}\Varid{calcOrigins}\;(\Conid{Comp}\;\Varid{b}\;\Varid{x1}\;\Varid{x2},\Varid{o})\mathrel{=}\Conid{Comp}\;()\;(\Varid{calcOrigins}\;(\Varid{x1},\Varid{o}))\;(\Varid{calcOrigins}\;(\Varid{x2},\Varid{calc}\;\Varid{b}\;\Varid{o}\;(\Varid{dimen}\;\Varid{x1}))){}\<[E]%
 \\[\blanklineskip]%
 \>[B]{}\Varid{agrupCaixas}\mathbin{::}\Conid{X}\;(\Conid{Caixa},\Conid{Origem})\;()\to \Conid{Fig}{}\<[E]%
 \\
-\>[B]{}\Varid{agrupCaixas}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{agrupCaixas}\;(\Conid{Unid}\;(\Varid{c},\Varid{o}))\mathrel{=}[\mskip1.5mu (\Varid{o},\Varid{c})\mskip1.5mu]{}\<[E]%
+\\
+\>[B]{}\Varid{agrupCaixas}\;(\Conid{Comp}\;()\;\Varid{x1}\;\Varid{x2})\mathrel{=}\Varid{agrupCaixas}\;\Varid{x1}\plus \Varid{agrupCaixas}\;\Varid{x2}{}\<[E]%
 \\[\blanklineskip]%
 \>[B]{}\Varid{calc}\mathbin{::}\Conid{Tipo}\to \Conid{Origem}\to (\Conid{Float},\Conid{Float})\to \Conid{Origem}{}\<[E]%
 \\
@@ -2056,11 +2060,23 @@ outras funções auxiliares que sejam necessárias.
 \\[\blanklineskip]%
 \>[B]{}\Varid{caixasAndOrigin2Pict}\mathbin{::}(\Conid{X}\;\Conid{Caixa}\;\Conid{Tipo},\Conid{Origem})\to \Conid{\Conid{G}.Picture}{}\<[E]%
 \\
-\>[B]{}\Varid{caixasAndOrigin2Pict}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{caixasAndOrigin2Pict}\mathrel{=}\Conid{\Conid{G}.Pictures}\comp \Varid{crCaixa2}\comp \Varid{agrupCaixas}\comp \Varid{calcOrigins}{}\<[E]%
 \\[\blanklineskip]%
 \>[B]{}\Varid{mostraCaixas}\mathbin{::}(\Conid{L2D},\Conid{Origem})\to \fun{IO}\;(){}\<[E]%
 \\
-\>[B]{}\Varid{mostraCaixas}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{mostraCaixas}\mathrel{=}\Varid{display}\comp \Varid{caixasAndOrigin2Pict}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+\subsection*{Funções Auxiliares Problema 3}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{crCaixa2}\mathbin{::}\Conid{Fig}\to [\mskip1.5mu \Conid{\Conid{G}.Picture}\mskip1.5mu]{}\<[E]%
+\\
+\>[B]{}\Varid{crCaixa2}\;[\mskip1.5mu \mskip1.5mu]\mathrel{=}[\mskip1.5mu \mskip1.5mu]{}\<[E]%
+\\
+\>[B]{}\Varid{crCaixa2}\;((\Varid{o},((\Varid{x},\Varid{y}),(\Varid{text},\Varid{color})))\mathbin{:}\Varid{t})\mathrel{=}\Varid{crCaixa}\;\Varid{o}\;(\Varid{fromIntegral}\;\Varid{x})\;(\Varid{fromIntegral}\;\Varid{y})\;\Varid{text}\;\Varid{color}\mathbin{:}\Varid{crCaixa2}\;\Varid{t}{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 
@@ -2073,13 +2089,53 @@ Solução:
 \>[B]{}\Varid{cos'}\;\Varid{x}\mathrel{=}\Varid{prj}\comp \for{\Varid{loop}}\ {\Varid{init}}\;\mathbf{where}{}\<[E]%
 \\
 \>[B]{}\hsindent{4}{}\<[4]%
-\>[4]{}\Varid{loop}\mathrel{=}\bot {}\<[E]%
+\>[4]{}\Varid{loop}\;(\Varid{coss},\Varid{rec1},\Varid{rec2},\Varid{rec3})\mathrel{=}(\Varid{coss}\mathbin{+}\Varid{rec1},\Varid{rec1}\mathbin{*}(\mathbin{-}\Varid{square}\;(\Varid{x})\mathbin{/}\Varid{rec2}),\Varid{rec2}\mathbin{+}\Varid{rec3},\Varid{rec3}\mathbin{+}\mathrm{8}){}\<[E]%
 \\
 \>[B]{}\hsindent{4}{}\<[4]%
-\>[4]{}\Varid{init}\mathrel{=}\bot {}\<[E]%
+\>[4]{}\Varid{init}\mathrel{=}(\mathrm{1},\mathbin{-}\Varid{square}\;(\Varid{x})\mathbin{/}\mathrm{2},\mathrm{12},\mathrm{18}){}\<[E]%
 \\
 \>[B]{}\hsindent{4}{}\<[4]%
-\>[4]{}\Varid{prj}\mathrel{=}\bot {}\<[E]%
+\>[4]{}\Varid{prj}\;(\Varid{coss},\Varid{rec1},\Varid{rec2},\Varid{rec3})\mathrel{=}\Varid{coss}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+\subsection*{Funções de recursividade}
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{coss}\mathbin{::}(\Conid{Num}\;\Varid{a},\Conid{Eq}\;\Varid{a},\Conid{Floating}\;\Varid{a},\Conid{Integral}\;\Varid{a})\Rightarrow \Varid{a}\to \Varid{a}\to \Varid{a}{}\<[E]%
+\\
+\>[B]{}\Varid{coss}\;\Varid{x}\;\mathrm{0}\mathrel{=}\mathrm{1}{}\<[E]%
+\\
+\>[B]{}\Varid{coss}\;\Varid{x}\;(\Varid{n}\mathbin{+}\mathrm{1})\mathrel{=}(\Varid{coss}\;\Varid{x}\;\Varid{n})\mathbin{+}(\Varid{rec1}\;\Varid{x}\;\Varid{n}){}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{rec1}\mathbin{::}(\Conid{Num}\;\Varid{a},\Conid{Eq}\;\Varid{a},\Conid{Floating}\;\Varid{a},\Conid{Integral}\;\Varid{a})\Rightarrow \Varid{a}\to \Varid{a}\to \Varid{a}{}\<[E]%
+\\
+\>[B]{}\Varid{rec1}\;\Varid{x}\;\mathrm{0}\mathrel{=}\mathbin{-}\Varid{square}\;(\Varid{x})\mathbin{/}\mathrm{2}{}\<[E]%
+\\
+\>[B]{}\Varid{rec1}\;\Varid{x}\;(\Varid{n}\mathbin{+}\mathrm{1})\mathrel{=}(\Varid{rec1}\;\Varid{x}\;\Varid{n})\mathbin{*}(\mathbin{-}\Varid{square}\;(\Varid{x})\mathbin{/}\Varid{rec2}\;\Varid{x}\;\Varid{n}){}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{rec2}\mathbin{::}(\Conid{Num}\;\Varid{a},\Conid{Eq}\;\Varid{a},\Conid{Floating}\;\Varid{a},\Conid{Integral}\;\Varid{a})\Rightarrow \Varid{a}\to \Varid{a}\to \Varid{a}{}\<[E]%
+\\
+\>[B]{}\Varid{rec2}\;\Varid{x}\;\mathrm{0}\mathrel{=}\mathrm{12}{}\<[E]%
+\\
+\>[B]{}\Varid{rec2}\;\Varid{x}\;(\Varid{n}\mathbin{+}\mathrm{1})\mathrel{=}(\Varid{rec2}\;\Varid{x}\;\Varid{n})\mathbin{+}(\Varid{rec3}\;\Varid{x}\;\Varid{n}){}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{rec3}\mathbin{::}(\Conid{Num}\;\Varid{a},\Conid{Eq}\;\Varid{a},\Conid{Floating}\;\Varid{a},\Conid{Integral}\;\Varid{a})\Rightarrow \Varid{a}\to \Varid{a}\to \Varid{a}{}\<[E]%
+\\
+\>[B]{}\Varid{rec3}\;\Varid{x}\;\mathrm{0}\mathrel{=}\mathrm{18}{}\<[E]%
+\\
+\>[B]{}\Varid{rec3}\;\Varid{x}\;(\Varid{n}\mathbin{+}\mathrm{1})\mathrel{=}(\Varid{rec3}\;\Varid{x}\;\Varid{n})\mathbin{+}\mathrm{8}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\subsection*{Funções Auxiliares}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{square}\mathbin{::}(\Conid{Num}\;\Varid{a},\Conid{Eq}\;\Varid{a},\Conid{Floating}\;\Varid{a})\Rightarrow \Varid{a}\to \Varid{a}{}\<[E]%
+\\
+\>[B]{}\Varid{square}\;\Varid{num}\mathrel{=}\Varid{num}\mathbin{*}\Varid{num}{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 
@@ -2113,13 +2169,13 @@ Triologia ``ana-cata-hilo":
     \ensuremath{\Conid{FS}\;\Varid{a}\;\Varid{b}}
            \ar[d]_-{\ensuremath{\cata{\Varid{g}}}}
 &
-    \ensuremath{(\Varid{a}\times(\Varid{b}\mathbin{+}\Conid{FS}\;\Varid{a}\;\Varid{b}))\mathbin{\char94 *}}
+    \ensuremath{(\Varid{a}\times(\Varid{b}\mathbin{+}\Conid{FS}\;\Varid{a}\;\Varid{b}))\mathbin{*}}
            \ar[d]^{\ensuremath{\map \;(\Varid{id}\times(\Varid{id}\mathbin{+}\cata{\Varid{g}}))}}
            \ar[l]_-{\ensuremath{\mathsf{in}}}
 \\
      \ensuremath{\Varid{c}}
 &
-     \ensuremath{(\Varid{a}\times(\Varid{b}\mathbin{+}\Varid{c}))\mathbin{\char94 *}}
+     \ensuremath{(\Varid{a}\times(\Varid{b}\mathbin{+}\Varid{c}))\mathbin{*}}
            \ar[l]^-{\ensuremath{\Varid{g}}}
 }
 \end{eqnarray*}
@@ -2174,6 +2230,16 @@ Outras funções pedidas:
 \>[B]{}\Varid{cFS2Exp}\mathbin{::}\Varid{a}\to \Conid{FS}\;\Varid{a}\;\Varid{b}\to (\Conid{Exp}\;()\;\Varid{a}){}\<[E]%
 \\
 \>[B]{}\Varid{cFS2Exp}\mathrel{=}\bot {}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+\subsection*{Funções auxiliares Problema 4}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{hasDuplicates}\mathbin{::}(\Conid{Ord}\;\Varid{a})\Rightarrow [\mskip1.5mu \Varid{a}\mskip1.5mu]\to \Conid{Bool}{}\<[E]%
+\\
+\>[B]{}\Varid{hasDuplicates}\;\Varid{xs}\mathrel{=}\length \;(\Varid{nub}\;\Varid{xs})\not\equiv \length \;\Varid{xs}{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 

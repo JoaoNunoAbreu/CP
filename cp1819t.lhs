@@ -1388,7 +1388,7 @@ hyloFS g h = cataFS h . anaFS g
 Outras funções pedidas:
 \begin{code}
 check :: (Eq a) => FS a b -> Bool
-check = undefined
+check = cataFS(hasDuplicates . map (p1))
 
 tar :: FS a b -> [(Path a, b)]
 tar = undefined
@@ -1417,9 +1417,18 @@ cFS2Exp = undefined
 
 \subsection*{Funções auxiliares Problema 4}
 \begin{code}
-hasDuplicates :: (Ord a) => [a] -> Bool
+
+hasDuplicates :: (Eq a) => [a] -> Bool
 hasDuplicates xs = length (nub xs) /= length xs
 
+hasFalses :: [Bool] -> Bool
+hasFalses l = length (filter(== True) l) /= length l
+
+checkDuplicates :: (Eq a) => FS a b -> Bool
+checkDuplicates = cataFS((hasDuplicates . map (p1)))
+
+checkBools :: FS a b -> Bool
+checkBools = cataFS(hasFalses . map ((either (const True) id) . p2))
 
 \end{code}
 
