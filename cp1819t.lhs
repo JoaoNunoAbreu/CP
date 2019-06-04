@@ -1274,10 +1274,7 @@ dimen = cataL2D(either f g)
 
 calcOrigins :: ((X Caixa Tipo),Origem) -> X (Caixa,Origem) ()
 calcOrigins (Unid d,o) = Unid(d,o)
-calcOrigins (Comp b (Unid r) (Unid l),o) = Comp () (Unid(r,subPairs o (getDimensao r))) (Unid(l,addPairs o (getDimensao l)))
-calcOrigins (Comp b (Unid r) comp,o) = Comp() (Unid(r,subPairs o (getDimensao r))) (calcOrigins(comp,o))
-calcOrigins (Comp b comp (Unid l),o) = Comp() (calcOrigins(comp,o)) (Unid(l,addPairs o (getDimensao l)))
-calcOrigins (Comp b x1 x2,o) = Comp () (calcOrigins (x1,o)) (calcOrigins (x2,o)) 
+calcOrigins (Comp b x1 x2,o) = Comp () (calcOrigins (x1,o)) (calcOrigins (x2,calc b o (dimen x1)))
 
 agrupCaixas :: X (Caixa ,Origem)() -> Fig
 agrupCaixas (Unid(c,o)) = [(o,c)]
@@ -1302,15 +1299,6 @@ mostraCaixas = display . caixasAndOrigin2Pict
 
 \subsection*{Funções Auxiliares Problema 3}
 \begin{code}
-
-getDimensao :: Caixa -> (Float,Float)
-getDimensao ((x,y),_) = (fromIntegral x, fromIntegral y)
-
-addPairs :: (Float, Float) -> (Float, Float) -> (Float, Float)
-addPairs (x1,y1) (x2,y2) = (x1+x2,y1+y2)
-
-subPairs :: (Float, Float) -> (Float, Float) -> (Float, Float)
-subPairs (x1,y1) (x2,y2) = (x1-x2,y1-y2)
 
 crCaixa2 :: Fig -> [G.Picture]
 crCaixa2 [] = []
