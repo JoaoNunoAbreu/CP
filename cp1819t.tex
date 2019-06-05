@@ -300,13 +300,13 @@
 
 \begin{center}\large
 \begin{tabular}{ll}
-\textbf{Grupo} nr. & 99 (preencher)
+\textbf{Grupo} nr. & 43
 \\\hline
-a11111 & Nome1 (preencher)	
+a84802 & João Nuno Cardoso Goncalves de Abreu
 \\
-a22222 & Nome2 (preencher)	
+a85370 & Hugo Fernandes Matias
 \\
-a33333 & Nome3 (preencher)	
+a84240 & Jorge Manuel Loureiro Vieira
 \end{tabular}
 \end{center}
 
@@ -1856,13 +1856,15 @@ outras funções auxiliares que sejam necessárias.
 \column{3}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{5}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{show'}\mathbin{::}\Conid{Expr}\to \Conid{String}{}\<[E]%
+\\
 \>[B]{}\Varid{show'}\mathrel{=}\Varid{cataExpr}\;\alt{\Varid{show}}{\Varid{aux}}{}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
 \>[3]{}\mathbf{where}{}\<[E]%
 \\
 \>[3]{}\hsindent{2}{}\<[5]%
-\>[5]{}\Varid{aux}\;((\Conid{Op}\;\Varid{o}),(\Varid{s1},\Varid{s2}))\mathrel{=}\Varid{s1}\plus \Varid{o}\plus \Varid{s2}{}\<[E]%
+\>[5]{}\Varid{aux}\;((\Conid{Op}\;\Varid{o}),(\Varid{s1},\Varid{s2}))\mathrel{=}\text{\ttfamily \char34 (\char34}\plus \text{\ttfamily \char34 (\char34}\plus \Varid{s1}\plus \text{\ttfamily \char34 )\char34}\plus \Varid{o}\plus \text{\ttfamily \char34 (\char34}\plus \Varid{s2}\plus \text{\ttfamily \char34 )\char34}\plus \text{\ttfamily \char34 )\char34}{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 
@@ -2194,22 +2196,69 @@ Triologia ``ana-cata-hilo":
 Outras funções pedidas:
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{3}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
 \>[B]{}\Varid{check}\mathbin{::}(\Conid{Eq}\;\Varid{a})\Rightarrow \Conid{FS}\;\Varid{a}\;\Varid{b}\to \Conid{Bool}{}\<[E]%
 \\
-\>[B]{}\Varid{check}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{check}\mathrel{=}\Varid{cataFS}\;(\neg \comp \Varid{hasDuplicatesOrFalses}\comp \map \;(\Varid{id}\times(\Varid{fromRight}\;\Conid{True}))){}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\mathbf{where}{}\<[E]%
+\\
+\>[3]{}\hsindent{2}{}\<[5]%
+\>[5]{}\Varid{hasDuplicatesOrFalses}\mathbin{::}(\Conid{Eq}\;\Varid{a})\Rightarrow [\mskip1.5mu (\Varid{a},\Conid{Bool})\mskip1.5mu]\to \Conid{Bool}{}\<[E]%
+\\
+\>[3]{}\hsindent{2}{}\<[5]%
+\>[5]{}\Varid{hasDuplicatesOrFalses}\;\Varid{xs}\mathrel{=}\length \;(\Varid{nub}\;\Varid{xs})\not\equiv \length \;\Varid{xs}\mathrel{\vee}\length \;(\Varid{filter}\;(\equiv \Conid{True})\;(\map \;\p2\;\Varid{xs}))\not\equiv \length \;\Varid{xs}{}\<[E]%
 \\[\blanklineskip]%
 \>[B]{}\Varid{tar}\mathbin{::}\Conid{FS}\;\Varid{a}\;\Varid{b}\to [\mskip1.5mu (\Conid{Path}\;\Varid{a},\Varid{b})\mskip1.5mu]{}\<[E]%
 \\
-\>[B]{}\Varid{tar}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{tar}\mathrel{=}\Varid{cataFS}\;(\Varid{concat}\comp \map \;\Varid{f}){}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\mathbf{where}{}\<[E]%
+\\
+\>[3]{}\hsindent{2}{}\<[5]%
+\>[5]{}\Varid{f}\mathbin{::}(\Varid{a},\Varid{b}+[\mskip1.5mu (\Conid{Path}\;\Varid{a},\Varid{b})\mskip1.5mu])\to [\mskip1.5mu (\Conid{Path}\;\Varid{a},\Varid{b})\mskip1.5mu]{}\<[E]%
+\\
+\>[3]{}\hsindent{2}{}\<[5]%
+\>[5]{}\Varid{f}\;(\Varid{a},(i_1\;\Varid{x}))\mathrel{=}[\mskip1.5mu (\Varid{singl}\;\Varid{a},\Varid{x})\mskip1.5mu]{}\<[E]%
+\\
+\>[3]{}\hsindent{2}{}\<[5]%
+\>[5]{}\Varid{f}\;(\Varid{a},(i_2\;\Varid{x}))\mathrel{=}\Varid{addElementInPair}\;\Varid{x}\;\Varid{a}{}\<[E]%
 \\[\blanklineskip]%
 \>[B]{}\Varid{untar}\mathbin{::}(\Conid{Eq}\;\Varid{a})\Rightarrow [\mskip1.5mu (\Conid{Path}\;\Varid{a},\Varid{b})\mskip1.5mu]\to \Conid{FS}\;\Varid{a}\;\Varid{b}{}\<[E]%
 \\
-\>[B]{}\Varid{untar}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{untar}\mathrel{=}\Varid{joinDupDirs}\comp \Varid{anaFS}\;(\map \;\Varid{f}){}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\mathbf{where}{}\<[E]%
+\\
+\>[3]{}\hsindent{2}{}\<[5]%
+\>[5]{}\Varid{f}\mathbin{::}(\Conid{Path}\;\Varid{a},\Varid{b})\to (\Varid{a},\Varid{b}+[\mskip1.5mu (\Conid{Path}\;\Varid{a},\Varid{b})\mskip1.5mu]){}\<[E]%
+\\
+\>[3]{}\hsindent{2}{}\<[5]%
+\>[5]{}\Varid{f}\;([\mskip1.5mu \Varid{a}\mskip1.5mu],\Varid{b})\mathrel{=}(\Varid{a},i_1\;\Varid{b}){}\<[E]%
+\\
+\>[3]{}\hsindent{2}{}\<[5]%
+\>[5]{}\Varid{f}\;((\Varid{h}\mathbin{:}\Varid{t}),\Varid{b})\mathrel{=}(\Varid{h},i_2\;[\mskip1.5mu (\Varid{t},\Varid{b})\mskip1.5mu]){}\<[E]%
 \\[\blanklineskip]%
 \>[B]{}\Varid{find}\mathbin{::}(\Conid{Eq}\;\Varid{a})\Rightarrow \Varid{a}\to \Conid{FS}\;\Varid{a}\;\Varid{b}\to [\mskip1.5mu \Conid{Path}\;\Varid{a}\mskip1.5mu]{}\<[E]%
 \\
-\>[B]{}\Varid{find}\mathrel{=}\bot {}\<[E]%
+\>[B]{}\Varid{find}\;\Varid{a}\mathrel{=}\Varid{cataFS}\;((\Varid{filtraPaths}\;\Varid{a})\comp \Varid{concat}\comp (\map \;\Varid{f})){}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\mathbf{where}{}\<[E]%
+\\
+\>[3]{}\hsindent{2}{}\<[5]%
+\>[5]{}\Varid{f}\mathbin{::}(\Conid{Eq}\;\Varid{a})\Rightarrow (\Varid{a},\Varid{b}+[\mskip1.5mu \Conid{Path}\;\Varid{a}\mskip1.5mu])\to [\mskip1.5mu \Conid{Path}\;\Varid{a}\mskip1.5mu]{}\<[E]%
+\\
+\>[3]{}\hsindent{2}{}\<[5]%
+\>[5]{}\Varid{f}\;(\Varid{a},(i_1\;\Varid{x}))\mathrel{=}[\mskip1.5mu \Varid{singl}\;\Varid{a}\mskip1.5mu]{}\<[E]%
+\\
+\>[3]{}\hsindent{2}{}\<[5]%
+\>[5]{}\Varid{f}\;(\Varid{a},(i_2\;\Varid{x}))\mathrel{=}\Varid{addElement}\;\Varid{x}\;\Varid{a}{}\<[E]%
 \\[\blanklineskip]%
 \>[B]{}\Varid{new}\mathbin{::}(\Conid{Eq}\;\Varid{a})\Rightarrow \Conid{Path}\;\Varid{a}\to \Varid{b}\to \Conid{FS}\;\Varid{a}\;\Varid{b}\to \Conid{FS}\;\Varid{a}\;\Varid{b}{}\<[E]%
 \\
@@ -2237,9 +2286,21 @@ Outras funções pedidas:
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{hasDuplicates}\mathbin{::}(\Conid{Ord}\;\Varid{a})\Rightarrow [\mskip1.5mu \Varid{a}\mskip1.5mu]\to \Conid{Bool}{}\<[E]%
+\>[B]{}\Varid{addElementInPair}\mathbin{::}[\mskip1.5mu ([\mskip1.5mu \Varid{a}\mskip1.5mu],\Varid{b})\mskip1.5mu]\to \Varid{a}\to [\mskip1.5mu ([\mskip1.5mu \Varid{a}\mskip1.5mu],\Varid{b})\mskip1.5mu]{}\<[E]%
 \\
-\>[B]{}\Varid{hasDuplicates}\;\Varid{xs}\mathrel{=}\length \;(\Varid{nub}\;\Varid{xs})\not\equiv \length \;\Varid{xs}{}\<[E]%
+\>[B]{}\Varid{addElementInPair}\;[\mskip1.5mu \mskip1.5mu]\;\anonymous \mathrel{=}[\mskip1.5mu \mskip1.5mu]{}\<[E]%
+\\
+\>[B]{}\Varid{addElementInPair}\;((\Varid{a},\Varid{b})\mathbin{:}\Varid{t})\;\Varid{x}\mathrel{=}(\Varid{x}\mathbin{:}\Varid{a},\Varid{b})\mathbin{:}\Varid{addElementInPair}\;\Varid{t}\;\Varid{x}{}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{addElement}\mathbin{::}\Conid{Eq}\;\Varid{a}\Rightarrow [\mskip1.5mu [\mskip1.5mu \Varid{a}\mskip1.5mu]\mskip1.5mu]\to \Varid{a}\to [\mskip1.5mu [\mskip1.5mu \Varid{a}\mskip1.5mu]\mskip1.5mu]{}\<[E]%
+\\
+\>[B]{}\Varid{addElement}\;[\mskip1.5mu \mskip1.5mu]\;\anonymous \mathrel{=}[\mskip1.5mu \mskip1.5mu]{}\<[E]%
+\\
+\>[B]{}\Varid{addElement}\;(\Varid{a}\mathbin{:}\Varid{t})\;\Varid{x}\mathrel{=}(\Varid{x}\mathbin{:}\Varid{a})\mathbin{:}\Varid{addElement}\;\Varid{t}\;\Varid{x}{}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{filtraPaths}\mathbin{::}\Conid{Eq}\;\Varid{a}\Rightarrow \Varid{a}\to [\mskip1.5mu \Conid{Path}\;\Varid{a}\mskip1.5mu]\to [\mskip1.5mu \Conid{Path}\;\Varid{a}\mskip1.5mu]{}\<[E]%
+\\
+\>[B]{}\Varid{filtraPaths}\;\Varid{a}\mathrel{=}\Varid{filter}\;(\Varid{elem}\;\Varid{a}){}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 

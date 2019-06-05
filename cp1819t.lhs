@@ -113,13 +113,13 @@
 
 \begin{center}\large
 \begin{tabular}{ll}
-\textbf{Grupo} nr. & 99 (preencher)
+\textbf{Grupo} nr. & 43
 \\\hline
-a11111 & Nome1 (preencher)	
+a84802 & João Nuno Cardoso Goncalves de Abreu
 \\
-a22222 & Nome2 (preencher)	
+a85370 & Hugo Fernandes Matias
 \\
-a33333 & Nome3 (preencher)	
+a84240 & Jorge Manuel Loureiro Vieira
 \end{tabular}
 \end{center}
 
@@ -1167,9 +1167,10 @@ calcula = cataExpr (either (id) (cond ((== "+") . getOp . p1) f g))
 
 \begin{code}
 
+show' :: Expr -> String
 show' = cataExpr (either show aux)
   where
-    aux ((Op o),(s1,s2)) = s1 ++ o ++ s2
+    aux ((Op o),(s1,s2)) = "(" ++ s1 ++ " " ++ o ++ " " ++ s2 ++ ")"
 
 \end{code}
 
@@ -1401,10 +1402,18 @@ tar = cataFS(concat . map f)
     f (a,(Right x)) = addElementInPair x a
 
 untar :: (Eq a) => [(Path a, b)] -> FS a b
-untar = undefined
+untar = joinDupDirs . anaFS(map f)
+  where
+    f :: (Path a, b) -> (a, Either b [(Path a, b)])
+    f ([a],b) = (a,Left b)
+    f ((h:t),b) = (h,Right [(t,b)])
 
 find :: (Eq a) => a -> FS a b -> [Path a]
-find a fs = filter (elem a) (map (p1) (tar fs))
+find a = cataFS(concat . (map (f a)))
+  where
+    f :: (Eq a) => a -> (a, Either b [Path a]) -> [Path a]
+    f y (a,(Left x)) = if (a == y) then [singl a] else []
+    f y (a,(Right x)) = addElement x a
 
 new :: (Eq a) => Path a -> b -> FS a b -> FS a b
 new = undefined
@@ -1428,6 +1437,10 @@ cFS2Exp = undefined
 addElementInPair :: [([a],b)] -> a -> [([a],b)]
 addElementInPair [] _ = []
 addElementInPair ((a,b):t) x = (x : a,b) : addElementInPair t x
+
+addElement :: Eq a => [[a]] -> a -> [[a]]
+addElement [] _ = []
+addElement (a:t) x = (x : a):addElement t x
 
 \end{code}
 
