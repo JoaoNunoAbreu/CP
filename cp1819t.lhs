@@ -1388,16 +1388,23 @@ hyloFS g h = cataFS h . anaFS g
 Outras funções pedidas:
 \begin{code}
 check :: (Eq a) => FS a b -> Bool
-check = cataFS(hasDuplicates . map (p1))
+check = cataFS(not . hasDuplicatesOrFalses . map (id >< (fromRight True)))
+  where
+    hasDuplicatesOrFalses :: (Eq a) => [(a,Bool)] -> Bool
+    hasDuplicatesOrFalses xs = length (nub xs) /= length xs || length (filter(== True) (map snd xs)) /= length xs
 
 tar :: FS a b -> [(Path a, b)]
-tar = undefined
+tar = cataFS(concat . map f)
+  where
+    f :: (a, Either b [(Path a,b)]) -> [(Path a, b)]
+    f (a,(Left x)) = [(singl a, x)]
+    f (a,(Right x)) = addElementInPair x a
 
 untar :: (Eq a) => [(Path a, b)] -> FS a b
 untar = undefined
 
 find :: (Eq a) => a -> FS a b -> [Path a]
-find = undefined
+find a fs = filter (elem a) (map (p1) (tar fs))
 
 new :: (Eq a) => Path a -> b -> FS a b -> FS a b
 new = undefined
@@ -1418,17 +1425,9 @@ cFS2Exp = undefined
 \subsection*{Funções auxiliares Problema 4}
 \begin{code}
 
-hasDuplicates :: (Eq a) => [a] -> Bool
-hasDuplicates xs = length (nub xs) /= length xs
-
-hasFalses :: [Bool] -> Bool
-hasFalses l = length (filter(== True) l) /= length l
-
-checkDuplicates :: (Eq a) => FS a b -> Bool
-checkDuplicates = cataFS((hasDuplicates . map (p1)))
-
-checkBools :: FS a b -> Bool
-checkBools = cataFS(hasFalses . map ((either (const True) id) . p2))
+addElementInPair :: [([a],b)] -> a -> [([a],b)]
+addElementInPair [] _ = []
+addElementInPair ((a,b):t) x = (x : a,b) : addElementInPair t x
 
 \end{code}
 
